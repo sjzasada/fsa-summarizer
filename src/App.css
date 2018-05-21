@@ -1,28 +1,51 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
+  width: 100px;
   color: white;
-}
-
-.App-title {
-  font-size: 1.5em;
-}
-
-.App-intro {
   font-size: large;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.App-header {
+  padding: 40px;
+}
+
+.App-title {
+  font-size: 2.5em;
+}
+
+.App-intro {
+  padding-bottom: 30px;
+}
+
+.App-main {
+  width: 100%;
+}
+
+.ScoreTable-main {
+  padding-top: 40px;
+}
+
+.Loader {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100px;
+}
+
+.DropDown {
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.error {
+  color: red;
+}
+
+.dropdown-menu {
+  height: 300px;
+  overflow-y: scroll;
+}
+
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+   background-color: #5bc0de;
 }
