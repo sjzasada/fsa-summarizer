@@ -43,17 +43,17 @@ class ScoreTableBodyFHIS extends Component {
     //render Scottish format table, calculating percentages
     return (
       <tbody>
-        <ScoreTableRow title="Pass" val={pass / total * 100} />{" "}
+        <ScoreTableRow title="Pass" val={pass / total * 100} />
         <ScoreTableRow
           title="Awaiting Inspection"
           val={awaitinginspection / total * 100}
-        />{" "}
+        />
         <ScoreTableRow
           title="Awaiting Publication"
           val={awaitingpublication / total * 100}
-        />{" "}
-        <ScoreTableRow title="Improvement Required" val={fail / total * 100} />{" "}
-        <ScoreTableRow title="Exempt" val={exempt / total * 100} />{" "}
+        />
+        <ScoreTableRow title="Improvement Required" val={fail / total * 100} />
+        <ScoreTableRow title="Exempt" val={exempt / total * 100} />
       </tbody>
     );
   }

@@ -28,8 +28,7 @@ class AuthoritiesList extends Component {
     this.setState({
       selectedAuth: evt.id,
       btnTitle: evt.name,
-      schemeType: evt.scheme,
-      error: null
+      schemeType: evt.scheme
     });
   }
 
@@ -37,7 +36,8 @@ class AuthoritiesList extends Component {
   //fire state changes on events to re-render component
   componentDidMount() {
     this.setState({
-      isLoading: true
+      isLoading: true, //set the state to loading, so that a wait widget is displayed
+      error: null
     });
 
     fetch("http://api.ratings.food.gov.uk/Authorities/basic", {
@@ -84,8 +84,7 @@ class AuthoritiesList extends Component {
       console.log(error);
       return (
         <div className="error">
-          {" "}
-          <p> {error.message} </p>{" "}
+          <p> {error.message} </p>
         </div>
       );
     }
@@ -94,8 +93,7 @@ class AuthoritiesList extends Component {
     if (isLoading) {
       return (
         <div className="Loader">
-          {" "}
-          <ReactLoading type={"bars"} color={"white"} />{" "}
+          <ReactLoading type={"bars"} color={"white"} />
         </div>
       );
     }
@@ -103,7 +101,6 @@ class AuthoritiesList extends Component {
     //render dropdown menu when data is loaded
     return (
       <div>
-        {" "}
         <div className="DropDown">
           <ButtonGroup justified>
             <DropdownButton
@@ -115,7 +112,6 @@ class AuthoritiesList extends Component {
               id={`split-button-basic-1`}
               onSelect={this.handleSelect}
             >
-              {" "}
               {authorities.map(authority => (
                 <MenuItem
                   eventKey={{
@@ -125,16 +121,15 @@ class AuthoritiesList extends Component {
                   }} //store each authority name, id and scheme in eventkey object
                   key={authority.LocalAuthorityIdCode}
                 >
-                  {" "}
-                  {authority.Name}{" "}
+                  {authority.Name}
                 </MenuItem>
-              ))}{" "}
-            </DropdownButton>{" "}
-          </ButtonGroup>{" "}
-        </div>{" "}
+              ))}
+            </DropdownButton>
+          </ButtonGroup>
+        </div>
         <div className="ScoreTable-main">
-          <ScoreTable authority={selectedAuth} scheme={schemeType} />{" "}
-        </div>{" "}
+          <ScoreTable authority={selectedAuth} scheme={schemeType} />
+        </div>
       </div>
     );
   }

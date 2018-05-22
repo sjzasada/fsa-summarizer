@@ -21,3 +21,11 @@ The application will be available at `http://localhost:3000`
 ## Testing
 
 Run the test suite with `npm test`
+
+## Deployment
+
+Deployable code can be built with `npm build`
+
+## Assumptions
+
+The application assumes that the data returned by the FSA API is consistent with the scheme specified by the FSA

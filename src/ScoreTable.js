@@ -22,7 +22,7 @@ class ScoreTable extends Component {
     if (nextProps.authority !== this.props.authority) {
       this.setState({
         selectedAuth: nextProps.authority,
-        isLoading: true,
+        isLoading: true, //set the state to loading, so that a wait widget is displayed
         error: null
       });
 
@@ -63,18 +63,19 @@ class ScoreTable extends Component {
   render() {
     const {establishments, isLoading, error, selectedAuth} = this.state;
 
-    console.log("Displaying data for authority: " + selectedAuth);
-
+    //if no authority is selected, display nothing
     if (!selectedAuth) {
       return <p />;
     }
+
+    console.log("Displaying data for authority: " + selectedAuth);
 
     //if error not null, log and display message
     if (error) {
       console.log(error);
       return (
         <div className="error">
-          <p> {error.message} </p>{" "}
+          <p> {error.message} </p>
         </div>
       );
     }
@@ -88,7 +89,7 @@ class ScoreTable extends Component {
             color={"white"}
             width={100}
             height={100}
-          />{" "}
+          />
         </div>
       );
     }
@@ -99,14 +100,15 @@ class ScoreTable extends Component {
         <Table striped bordered condensed>
           <thead>
             <tr>
-              <th> Rating </th> <th> Percentage </th>{" "}
-            </tr>{" "}
-          </thead>{" "}
+              <th>Rating</th>
+              <th>Percentage</th>
+            </tr>
+          </thead>
           <ScoreTableBody
             establishments={establishments}
             scheme={this.props.scheme}
-          />{" "}
-        </Table>{" "}
+          />
+        </Table>
       </div>
     );
   }
