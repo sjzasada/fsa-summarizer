@@ -6,12 +6,15 @@ import ScoreTableBodyFHIS from "./ScoreTableBodyFHIS.js";
 
 //Component to fetch data for selected authority and display results table
 class ScoreTable extends Component {
+  _mounted = false;
+
   constructor(props) {
     super(props);
 
     this.state = {
       establishments: {},
       isLoading: false,
+      simultaneousRequests: 0, // a user selecting an authority while the app is in the process of downloading data for a previous authority introduces a race condition that makes it uncertain which data will be displayed. simultaneousRequests tracks the number of requests to ensure only the most recent is shown.
       selectedAuth: null,
       error: null
     };
@@ -19,11 +22,12 @@ class ScoreTable extends Component {
 
   //load new data when component is passed a new authority
   componentWillReceiveProps(nextProps) {
-    if (nextProps.authority !== this.props.authority) {
+    if (nextProps.authority !== this.props.authority && this.state.isMounted) {
       this.setState({
         selectedAuth: nextProps.authority,
         isLoading: true, //set the state to loading, so that a wait widget is displayed
-        error: null
+        error: null,
+        simultaneousRequests: this.state.simultaneousRequests + 1
       });
 
       let url =
@@ -44,19 +48,40 @@ class ScoreTable extends Component {
             throw new Error("Something went wrong ..."); //throw error for everything except HTTP 200
           }
         })
-        .then(data =>
-          this.setState({
-            establishments: data.establishments,
-            isLoading: false
-          })
-        )
-        .catch(error =>
-          this.setState({
-            error,
-            isLoading: false
-          })
-        );
+        .then(data => {
+          if (this._mounted) {
+            //check if this is the last request
+            if (this.state.simultaneousRequests === 1) {
+              this.setState({
+                establishments: data.establishments,
+                simultaneousRequests: this.state.simultaneousRequests - 1,
+                isLoading: false
+              });
+            } else {
+              this.setState({
+                simultaneousRequests: this.state.simultaneousRequests - 1
+              });
+            }
+          }
+        })
+        .catch(error => {
+          if (this._mounted) {
+            this.setState({
+              error,
+              isLoading: false,
+              simultaneousRequests: this.state.simultaneousRequests - 1
+            });
+          }
+        });
     }
+  }
+
+  componentDidMount() {
+    this._mounted = true;
+  }
+
+  componentWillUnmount() {
+    this._mounted = false;
   }
 
   //rednder the score table

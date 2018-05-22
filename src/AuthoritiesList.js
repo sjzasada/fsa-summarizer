@@ -5,6 +5,8 @@ import ScoreTable from "./ScoreTable.js";
 
 //This components fetches and displays a dropdown list of authorities
 class AuthoritiesList extends Component {
+  _mounted = false; //considered an antipattern by FB, but easier than using Redux for a simple app
+
   constructor(props) {
     super(props);
 
@@ -15,7 +17,7 @@ class AuthoritiesList extends Component {
       selectedAuth: null,
       error: null,
       schemeType: 1,
-      btnTitle: "Select an authority"
+      btnTitle: "Select an authority" //we change the button title when we handle a state change based on a list selection
     };
 
     this.handleSelect = this.handleSelect.bind(this);
@@ -25,6 +27,7 @@ class AuthoritiesList extends Component {
   //when a selection is made, set the button title, scheme type and authority id
   handleSelect(evt) {
     console.log(evt);
+
     this.setState({
       selectedAuth: evt.id,
       btnTitle: evt.name,
@@ -32,9 +35,14 @@ class AuthoritiesList extends Component {
     });
   }
 
+  componentWillUnmount() {
+    this._mounted = false;
+  }
+
   //fetch data when component loaded
   //fire state changes on events to re-render component
   componentDidMount() {
+    this._mounted = true;
     this.setState({
       isLoading: true, //set the state to loading, so that a wait widget is displayed
       error: null
@@ -54,18 +62,22 @@ class AuthoritiesList extends Component {
           throw new Error("Something went wrong ..."); //throw error for everything except HTTP 200
         }
       })
-      .then(data =>
-        this.setState({
-          authorities: data.authorities,
-          isLoading: false
-        })
-      )
-      .catch(error =>
-        this.setState({
-          error,
-          isLoading: false
-        })
-      );
+      .then(data => {
+        if (this._mounted) {
+          this.setState({
+            authorities: data.authorities,
+            isLoading: false
+          });
+        }
+      })
+      .catch(error => {
+        if (this._mounted) {
+          this.setState({
+            error,
+            isLoading: false
+          });
+        }
+      });
   }
 
   //render the component
