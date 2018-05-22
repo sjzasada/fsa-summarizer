@@ -73,8 +73,8 @@ class ScoreTable extends Component {
     if (error) {
       console.log(error);
       return (
-        <div className="Loader error">
-          <p> {error.message} </p>
+        <div className="error">
+          <p> {error.message} </p>{" "}
         </div>
       );
     }
@@ -88,7 +88,7 @@ class ScoreTable extends Component {
             color={"white"}
             width={100}
             height={100}
-          />
+          />{" "}
         </div>
       );
     }
@@ -99,15 +99,14 @@ class ScoreTable extends Component {
         <Table striped bordered condensed>
           <thead>
             <tr>
-              <th>Rating</th>
-              <th>Percentage</th>
-            </tr>
-          </thead>
+              <th> Rating </th> <th> Percentage </th>{" "}
+            </tr>{" "}
+          </thead>{" "}
           <ScoreTableBody
             establishments={establishments}
             scheme={this.props.scheme}
-          />
-        </Table>
+          />{" "}
+        </Table>{" "}
       </div>
     );
   }

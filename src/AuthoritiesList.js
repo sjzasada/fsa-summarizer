@@ -83,7 +83,7 @@ class AuthoritiesList extends Component {
     if (error) {
       console.log(error);
       return (
-        <div className="Loader error">
+        <div className="error">
           {" "}
           <p> {error.message} </p>{" "}
         </div>
