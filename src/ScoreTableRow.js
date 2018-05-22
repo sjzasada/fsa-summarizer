@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 
+//Component to render the table rows. Show score to 2dp
 class ScoreTableRow extends Component {
   render() {
     return (

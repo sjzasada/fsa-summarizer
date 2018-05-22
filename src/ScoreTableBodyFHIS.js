@@ -2,8 +2,10 @@ import React, {Component} from "react";
 
 import ScoreTableRow from "./ScoreTableRow.js";
 
+//Component to process and display Scottish scheme data
 class ScoreTableBodyFHIS extends Component {
   render() {
+    //possible scores
     var pass = 0;
     var awaitinginspection = 0;
     var awaitingpublication = 0;
@@ -14,6 +16,7 @@ class ScoreTableBodyFHIS extends Component {
 
     var establishments = this.props.establishments;
 
+    //iterate over array of establishments
     for (var i in establishments) {
       total++;
       switch (establishments[i].RatingValue) {
@@ -35,8 +38,9 @@ class ScoreTableBodyFHIS extends Component {
       }
     }
 
-    console.log(total);
+    console.log("Total establishments in authority: " + total);
 
+    //render Scottish format table, calculating percentages
     return (
       <tbody>
         <ScoreTableRow title="Pass" val={pass / total * 100} />{" "}
@@ -49,7 +53,7 @@ class ScoreTableBodyFHIS extends Component {
           val={awaitingpublication / total * 100}
         />{" "}
         <ScoreTableRow title="Improvement Required" val={fail / total * 100} />{" "}
-        <ScoreTableRow title="Exempt" val={exempt / total * 100} />
+        <ScoreTableRow title="Exempt" val={exempt / total * 100} />{" "}
       </tbody>
     );
   }

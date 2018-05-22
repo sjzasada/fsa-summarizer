@@ -6,6 +6,7 @@ import AuthoritiesList from "./AuthoritiesList.js";
 
 import "./App.css";
 
+//Render the main app component
 class App extends Component {
   render() {
     return (

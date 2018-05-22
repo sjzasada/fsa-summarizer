@@ -2,8 +2,10 @@ import React, {Component} from "react";
 
 import ScoreTableRow from "./ScoreTableRow.js";
 
+//Component to process and display non-Scottish scheme data
 class ScoreTableBodyFHRS extends Component {
   render() {
+    //possible scores
     var five = 0;
     var four = 0;
     var three = 0;
@@ -15,6 +17,7 @@ class ScoreTableBodyFHRS extends Component {
 
     var establishments = this.props.establishments;
 
+    //iterate over array of establishments
     for (var i in establishments) {
       total++;
       switch (establishments[i].RatingValue) {
@@ -38,8 +41,9 @@ class ScoreTableBodyFHRS extends Component {
       }
     }
 
-    console.log(total);
+    console.log("Total establishments in authority: " + total);
 
+    //render non-Scottish format table, calculating percentages
     return (
       <tbody>
         <ScoreTableRow title="5-star" val={five / total * 100} />

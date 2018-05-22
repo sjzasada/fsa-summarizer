@@ -1,11 +1,10 @@
 import React, {Component} from "react";
-
 import {Table} from "react-bootstrap";
-
 import ReactLoading from "react-loading";
 import ScoreTableBodyFHRS from "./ScoreTableBodyFHRS.js";
 import ScoreTableBodyFHIS from "./ScoreTableBodyFHIS.js";
 
+//Component to fetch data for selected authority and display results table
 class ScoreTable extends Component {
   constructor(props) {
     super(props);
@@ -18,9 +17,14 @@ class ScoreTable extends Component {
     };
   }
 
+  //load new data when component is passed a new authority
   componentWillReceiveProps(nextProps) {
     if (nextProps.authority !== this.props.authority) {
-      this.setState({selectedAuth: nextProps.authority, isLoading: true});
+      this.setState({
+        selectedAuth: nextProps.authority,
+        isLoading: true,
+        error: null
+      });
 
       let url =
         "http://api.ratings.food.gov.uk/Establishments?pageSize=0&localAuthorityId=" +
@@ -37,7 +41,7 @@ class ScoreTable extends Component {
           if (response.ok) {
             return response.json();
           } else {
-            throw new Error("Something went wrong ...");
+            throw new Error("Something went wrong ..."); //throw error for everything except HTTP 200
           }
         })
         .then(data =>
@@ -55,23 +59,30 @@ class ScoreTable extends Component {
     }
   }
 
+  //rednder the score table
   render() {
     const {establishments, isLoading, error, selectedAuth} = this.state;
 
-    console.log("Authority: " + selectedAuth);
-    console.log("Establishments: " + establishments);
+    console.log("Displaying data for authority: " + selectedAuth);
+
     if (!selectedAuth) {
       return <p />;
     }
 
+    //if error not null, log and display message
     if (error) {
-      return <p> {error.message} </p>;
+      console.log(error);
+      return (
+        <div className="Loader error">
+          <p> {error.message} </p>
+        </div>
+      );
     }
 
+    //show a loading bar while data is being fetched
     if (isLoading) {
       return (
         <div className="Loader">
-          {" "}
           <ReactLoading
             type={"spin"}
             color={"white"}
@@ -82,6 +93,7 @@ class ScoreTable extends Component {
       );
     }
 
+    //render a table to display the data
     return (
       <div>
         <Table striped bordered condensed>
@@ -101,6 +113,7 @@ class ScoreTable extends Component {
   }
 }
 
+//format table based on whether Scottish scheme is in use or not
 class ScoreTableBody extends Component {
   render() {
     if (this.props.scheme === 1) {

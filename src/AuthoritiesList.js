@@ -1,16 +1,16 @@
 import React, {Component} from "react";
 import {DropdownButton, MenuItem, ButtonGroup} from "react-bootstrap";
-
 import ReactLoading from "react-loading";
-
 import ScoreTable from "./ScoreTable.js";
 
+//This components fetches and displays a dropdown list of authorities
 class AuthoritiesList extends Component {
   constructor(props) {
     super(props);
 
+    //the state of the component
     this.state = {
-      hits: [],
+      authorities: [],
       isLoading: false,
       selectedAuth: null,
       error: null,
@@ -21,6 +21,8 @@ class AuthoritiesList extends Component {
     this.handleSelect = this.handleSelect.bind(this);
   }
 
+  //handle selections from the drop-down list
+  //when a selection is made, set the button title, scheme type and authority id
   handleSelect(evt) {
     console.log(evt);
     this.setState({
@@ -31,6 +33,8 @@ class AuthoritiesList extends Component {
     });
   }
 
+  //fetch data when component loaded
+  //fire state changes on events to re-render component
   componentDidMount() {
     this.setState({
       isLoading: true
@@ -47,12 +51,12 @@ class AuthoritiesList extends Component {
         if (response.ok) {
           return response.json();
         } else {
-          throw new Error("Something went wrong ...");
+          throw new Error("Something went wrong ..."); //throw error for everything except HTTP 200
         }
       })
       .then(data =>
         this.setState({
-          hits: data.authorities,
+          authorities: data.authorities,
           isLoading: false
         })
       )
@@ -64,9 +68,10 @@ class AuthoritiesList extends Component {
       );
   }
 
+  //render the component
   render() {
     const {
-      hits,
+      authorities,
       isLoading,
       error,
       selectedAuth,
@@ -74,7 +79,9 @@ class AuthoritiesList extends Component {
       schemeType
     } = this.state;
 
+    //if error not null, log and display message
     if (error) {
+      console.log(error);
       return (
         <div className="Loader error">
           {" "}
@@ -83,6 +90,7 @@ class AuthoritiesList extends Component {
       );
     }
 
+    //show a loading bar while data is being fetched
     if (isLoading) {
       return (
         <div className="Loader">
@@ -92,6 +100,7 @@ class AuthoritiesList extends Component {
       );
     }
 
+    //render dropdown menu when data is loaded
     return (
       <div>
         {" "}
@@ -107,17 +116,17 @@ class AuthoritiesList extends Component {
               onSelect={this.handleSelect}
             >
               {" "}
-              {hits.map(hit => (
+              {authorities.map(authority => (
                 <MenuItem
                   eventKey={{
-                    id: hit.LocalAuthorityId,
-                    name: hit.Name,
-                    scheme: hit.SchemeType
-                  }}
-                  key={hit.LocalAuthorityIdCode}
+                    id: authority.LocalAuthorityId,
+                    name: authority.Name,
+                    scheme: authority.SchemeType
+                  }} //store each authority name, id and scheme in eventkey object
+                  key={authority.LocalAuthorityIdCode}
                 >
                   {" "}
-                  {hit.Name}{" "}
+                  {authority.Name}{" "}
                 </MenuItem>
               ))}{" "}
             </DropdownButton>{" "}
