@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  width: 100px;
+  width: 100%;
   color: white;
   font-size: large;
 }
@@ -32,13 +32,9 @@
 }
 
 .DropDown {
-  width: 50%;
+  width: 400px;
   margin-left: auto;
   margin-right: auto;
-}
-
-.error {
-  color: red;
 }
 
 .dropdown-menu {
@@ -46,6 +42,11 @@
   overflow-y: scroll;
 }
 
-.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-   background-color: #5bc0de;
+.error {
+  color: red;
+}
+
+.table-striped > tbody > tr:nth-child(2n + 1) > td,
+.table-striped > tbody > tr:nth-child(2n + 1) > th {
+  background-color: #5bc0de;
 }
