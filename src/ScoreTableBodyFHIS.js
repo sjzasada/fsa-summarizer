@@ -54,7 +54,7 @@ class ScoreTableBodyFHIS extends Component {
     scores.fail = fail / total * 100;
     scores.exempt = exempt / total * 100;
 
-    return scores;
+    return scores; //return map of results
   }
 
   render() {

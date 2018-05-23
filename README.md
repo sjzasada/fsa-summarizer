@@ -23,6 +23,8 @@ The application will be available at `http://localhost:3000`
 
 Run the test suite with `npm test`
 
+The tests are designed to test each component's contract
+
 ## Deployment
 
 Deployable code can be built with `npm build`

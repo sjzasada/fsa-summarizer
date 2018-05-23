@@ -55,7 +55,7 @@ class ScoreTableBodyFHRS extends Component {
     score.one = one / total * 100;
     score.exempt = exempt / total * 100;
 
-    return score;
+    return score; //return map of results
   }
 
   render() {
