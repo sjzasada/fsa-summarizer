@@ -14,7 +14,6 @@ class ScoreTable extends Component {
     this.state = {
       establishments: {},
       isLoading: false,
-      simultaneousRequests: 0, // a user selecting an authority while the app is in the process of downloading data for a previous authority introduces a race condition that makes it uncertain which data will be displayed. simultaneousRequests tracks the number of requests to ensure only the most recent is shown.
       selectedAuth: null,
       error: null
     };
@@ -22,12 +21,11 @@ class ScoreTable extends Component {
 
   //load new data when component is passed a new authority
   componentWillReceiveProps(nextProps) {
-    if (nextProps.authority !== this.props.authority && this.state.isMounted) {
+    if (nextProps.authority !== this.state.selectedAuth) {
       this.setState({
         selectedAuth: nextProps.authority,
         isLoading: true, //set the state to loading, so that a wait widget is displayed
-        error: null,
-        simultaneousRequests: this.state.simultaneousRequests + 1
+        error: null
       });
 
       let url =
@@ -43,33 +41,29 @@ class ScoreTable extends Component {
       })
         .then(response => {
           if (response.ok) {
-            return response.json();
+            //a user selecting an authority while the app is in the process of downloading data for a previous authority introduces a race condition that makes it uncertain which data will be displayed. check if this is the last request by seeing if the latest authority id is in the response url
+            if (response.url.includes(this.state.selectedAuth)) {
+              console.log("Returning JSON for " + this.state.selectedAuth);
+              return response.json();
+            }
           } else {
             throw new Error("Something went wrong ..."); //throw error for everything except HTTP 200
           }
         })
         .then(data => {
-          if (this._mounted) {
-            //check if this is the last request
-            if (this.state.simultaneousRequests === 1) {
-              this.setState({
-                establishments: data.establishments,
-                simultaneousRequests: this.state.simultaneousRequests - 1,
-                isLoading: false
-              });
-            } else {
-              this.setState({
-                simultaneousRequests: this.state.simultaneousRequests - 1
-              });
-            }
+          if (this._mounted && data !== undefined) {
+            //check if this is the latest request
+            this.setState({
+              establishments: data.establishments,
+              isLoading: false
+            });
           }
         })
         .catch(error => {
           if (this._mounted) {
             this.setState({
               error,
-              isLoading: false,
-              simultaneousRequests: this.state.simultaneousRequests - 1
+              isLoading: false
             });
           }
         });
@@ -92,8 +86,6 @@ class ScoreTable extends Component {
     if (!selectedAuth) {
       return <p />;
     }
-
-    console.log("Displaying data for authority: " + selectedAuth);
 
     //if error not null, log and display message
     if (error) {
@@ -119,6 +111,8 @@ class ScoreTable extends Component {
       );
     }
 
+    console.log("Displaying data for authority: " + selectedAuth);
+
     //render a table to display the data
     return (
       <div>
@@ -140,7 +134,7 @@ class ScoreTable extends Component {
 }
 
 //format table based on whether Scottish scheme is in use or not
-class ScoreTableBody extends Component {
+export class ScoreTableBody extends Component {
   render() {
     if (this.props.scheme === 1) {
       return <ScoreTableBodyFHRS establishments={this.props.establishments} />;

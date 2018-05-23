@@ -4,7 +4,13 @@ import ScoreTableRow from "./ScoreTableRow.js";
 
 //Component to process and display non-Scottish scheme data
 class ScoreTableBodyFHRS extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.calculateScores = this.calculateScores.bind(this);
+  }
+
+  //process json to calcualte scores
+  calculateScores(establishments) {
     //possible scores
     var five = 0;
     var four = 0;
@@ -14,8 +20,6 @@ class ScoreTableBodyFHRS extends Component {
     var exempt = 0;
 
     var total = 0;
-
-    var establishments = this.props.establishments;
 
     //iterate over array of establishments
     for (var i in establishments) {
@@ -40,18 +44,32 @@ class ScoreTableBodyFHRS extends Component {
           exempt++;
       }
     }
-
     console.log("Total establishments in authority: " + total);
+
+    let score = {};
+
+    score.five = five / total * 100;
+    score.four = four / total * 100;
+    score.three = three / total * 100;
+    score.two = two / total * 100;
+    score.one = one / total * 100;
+    score.exempt = exempt / total * 100;
+
+    return score;
+  }
+
+  render() {
+    let scores = this.calculateScores(this.props.establishments);
 
     //render non-Scottish format table, calculating percentages
     return (
       <tbody>
-        <ScoreTableRow title="5-star" val={five / total * 100} />
-        <ScoreTableRow title="4-star" val={four / total * 100} />
-        <ScoreTableRow title="3-star" val={three / total * 100} />
-        <ScoreTableRow title="2-star" val={two / total * 100} />
-        <ScoreTableRow title="1-star" val={one / total * 100} />
-        <ScoreTableRow title="Exempt" val={exempt / total * 100} />
+        <ScoreTableRow title="5-star" val={scores.five} />
+        <ScoreTableRow title="4-star" val={scores.four} />
+        <ScoreTableRow title="3-star" val={scores.three} />
+        <ScoreTableRow title="2-star" val={scores.two} />
+        <ScoreTableRow title="1-star" val={scores.one} />
+        <ScoreTableRow title="Exempt" val={scores.exempt} />
       </tbody>
     );
   }

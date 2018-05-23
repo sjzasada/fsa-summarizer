@@ -4,7 +4,13 @@ import ScoreTableRow from "./ScoreTableRow.js";
 
 //Component to process and display Scottish scheme data
 class ScoreTableBodyFHIS extends Component {
-  render() {
+  constructor(props) {
+    super(props);
+    this.calculateScores = this.calculateScores.bind(this);
+  }
+
+  //process json to calcualte scores
+  calculateScores(establishments) {
     //possible scores
     var pass = 0;
     var awaitinginspection = 0;
@@ -14,7 +20,7 @@ class ScoreTableBodyFHIS extends Component {
 
     var total = 0;
 
-    var establishments = this.props.establishments;
+    //  var establishments = this.props.establishments;
 
     //iterate over array of establishments
     for (var i in establishments) {
@@ -40,20 +46,34 @@ class ScoreTableBodyFHIS extends Component {
 
     console.log("Total establishments in authority: " + total);
 
+    var scores = {};
+
+    scores.pass = pass / total * 100;
+    scores.awaitinginspection = awaitinginspection / total * 100;
+    scores.awaitingpublication = awaitingpublication / total * 100;
+    scores.fail = fail / total * 100;
+    scores.exempt = exempt / total * 100;
+
+    return scores;
+  }
+
+  render() {
+    let scores = this.calculateScores(this.props.establishments);
+
     //render Scottish format table, calculating percentages
     return (
       <tbody>
-        <ScoreTableRow title="Pass" val={pass / total * 100} />
+        <ScoreTableRow title="Pass" val={scores.pass} />
         <ScoreTableRow
           title="Awaiting Inspection"
-          val={awaitinginspection / total * 100}
+          val={scores.awaitinginspection}
         />
         <ScoreTableRow
           title="Awaiting Publication"
-          val={awaitingpublication / total * 100}
+          val={scores.awaitingpublication}
         />
-        <ScoreTableRow title="Improvement Required" val={fail / total * 100} />
-        <ScoreTableRow title="Exempt" val={exempt / total * 100} />
+        <ScoreTableRow title="Improvement Required" val={scores.fail} />
+        <ScoreTableRow title="Exempt" val={scores.exempt} />
       </tbody>
     );
   }
