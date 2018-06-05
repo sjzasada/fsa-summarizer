@@ -1,7 +1,5 @@
 # FSA Food Hygiene Summariser
 
-Stefan Zasada (stefan@bluberrie.io)
-
 A React interface to summarise the FSA food hygiene ratings for UK local authorities.
 
 ## Requirements
