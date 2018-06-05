@@ -1,6 +1,8 @@
 # FSA Food Hygiene Summariser
 
-A React interface to summarise the FSA food hygiene ratings for UK local authorities.
+A React/Bootstrap interface to summarise the FSA food hygiene ratings for UK local authorities.
+
+Data is taken from the FSA API: http://api.ratings.food.gov.uk/Help
 
 ## Requirements
 
@@ -30,3 +32,8 @@ Deployable code can be built with `npm build`
 ## Assumptions
 
 * The application assumes that the data returned by the FSA API is consistent with the schema specified by the FSA
+
+## Docker
+
+The application can be built in Docker with `docker build -t fsaapp .` and run with `docker run -it -p 3000:3000 --rm`.
+
